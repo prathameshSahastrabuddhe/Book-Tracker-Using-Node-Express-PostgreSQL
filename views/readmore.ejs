@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><%= book.title %> - Full Notes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --light-bg: #fff;
+      --dark-bg: #121212;
+      --vintage-bg: #fdf6e3;
+      --light-text: #000;
+      --dark-text: #fff;
+      --vintage-text: #5a3e36;
+    }
+
+    html[data-theme='light'] {
+      background-color: var(--light-bg);
+      color: var(--light-text);
+    }
+
+    html[data-theme='dark'] {
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    html[data-theme='vintage'] {
+      background-color: var(--vintage-bg);
+      color: var(--vintage-text);
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      padding: 2rem;
+      line-height: 1.7;
+      transition: background-color 0.5s, color 0.5s;
+    }
+
+    .book-page {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+      background: rgba(255,255,255,0.85);
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border: 2px solid #ccc;
+    }
+
+    .book-cover {
+      max-width: 200px;
+      float: left;
+      margin-right: 2rem;
+      border-radius: 6px;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .book-info {
+      overflow: hidden;
+    }
+
+    .book-page h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .book-page .meta {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      color: #666;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 2rem;
+    }
+
+    .back-link a {
+      text-decoration: none;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    @media (max-width: 600px) {
+      .book-cover {
+        float: none;
+        display: block;
+        margin: 0 auto 1rem;
+      }
+
+      .book-info {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="book-page">
+    <div class="book-info">
+      <% if (book.cover_url) { %>
+        <img src="<%= book.cover_url.includes('http') ? book.cover_url : `https://covers.openlibrary.org/b/id/${book.cover_url}-L.jpg` %>" alt="Book Cover" class="book-cover">
+      <% } %>
+
+      <h1><%= book.title %></h1>
+      <p class="meta">
+        <strong>Author:</strong> <%= book.author %><br>
+        <strong>Rating:</strong> <%= book.rating %>/5<br>
+        <strong>Date Read:</strong> <%= book.date_read.toDateString ? book.date_read.toDateString() : book.date_read %>
+      </p>
+    </div>
+
+    <hr>
+
+    <p><%= book.notes.replace(/\n/g, '<br>') %></p>
+
+    <div class="back-link">
+      <a href="/">← Back to All Books</a>
+    </div>
+  </div>
+
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Book Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous" />
+
+  <style>
+    /* Background pattern */
+    body {
+      background-color: #f8f9fa;
+      background-image: url('https://www.transparenttextures.com/patterns/cream-pixels.png');
+      background-repeat: repeat;
+    }
+
+    header {
+      background-color: #fffdf7;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      font-family: 'Georgia', serif;
+      color: #5a3e36;
+    }
+
+    footer {
+      background-color: #fdf6e3;
+      color: #6c4f3d;
+    }
+
+    .main-content {
+      padding: 2rem 0;
+    }
+
+    .container-max {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="p-3 border-bottom mb-4">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between">
+      <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none text-dark fs-4 fw-bold">
+        📚 BookTracker
+      </a>
+      <ul class="nav me-lg-auto">
+        <li><a href="#" class="nav-link px-3 link-secondary">Home</a></li>
+        <li><a href="/add" class="nav-link px-3 text-dark">Add New Book</a></li>
+        <li><a href="/recent" class="nav-link px-3 text-dark">Recently Added</a></li>
+        <li><a href="/rating" class="nav-link px-3 text-dark">Top Rated</a></li>
+      </ul>
+      <form class="d-flex align-items-center mb-3 mb-lg-0 me-lg-3" action="/search" method="GET" role="search">
+        <div class="input-group">
+          <input type="search" class="form-control rounded-start-pill" name="q" placeholder="Search book or author..."
+            aria-label="Search" />
+          <button class="btn btn-primary rounded-end-pill" type="submit">🔍</button>
+        </div>
+      </form>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container main-content container-max">
+    <h1 class="text-center mb-5">📚 My Book Tracker 📚</h1>
+    <div class="row row-cols-1 g-4">
+      <% books.forEach(book=> { %>
+        <div class="col">
+          <div class="card border-0 shadow-sm rounded-4"
+            style="border: 3px double #6c4f3d; background-color: #fdf6e3; font-family: 'Georgia', serif;">
+            <div class="row g-0">
+              <!-- Cover -->
+              <div class="col-md-3 text-center p-3">
+                <img src="<%= book.cover_url %>" class="img-fluid rounded-3 shadow-sm" alt="Cover of <%= book.title %>"
+                  style="max-height: 250px; border: 2px solid #8b5e3c; padding: 4px;">
+              </div>
+
+              <!-- Book Info -->
+              <div class="col-md-7">
+                <div class="card-body">
+                  <h4 class="card-title fw-bold mb-2 text-dark">
+                    <%= book.title %>
+                  </h4>
+                  <p class="mb-1 text-dark"><strong>Author:</strong> <%= book.author %></p>
+                  <p class="mb-1 text-dark"><strong>Rating:</strong> <%= book.rating %>/5</p>
+                  <p class="mb-1 text-dark"><strong>Date Read:</strong>
+                    <%= book.date_read.toDateString ? book.date_read.toDateString() : book.date_read %>
+                  </p>
+                  <p class="mb-1 text-dark">
+                    <strong>Notes:</strong>
+                    <% const words=book.notes.trim().split(" "); %>
+                    <% if (words.length > 60) { %>
+                      <%= words.slice(0, 60).join(" ") %>...
+                      <a href="/book/<%=book.id %>" class="text-decoration-none text-primary">Read more</a>
+                    <% } else { %>
+                      <%= book.notes %>
+                    <% } %>
+                  </p>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="col-md-2 d-flex flex-column justify-content-center align-items-center px-3">
+                <a href="/edit/<%= book.id %>" class="btn btn-outline-dark w-100 mb-2 rounded-pill">✏️ Edit</a>
+                <form action="/delete/<%= book.id %>" method="POST" class="w-100">
+                  <button type="submit" class="btn btn-outline-danger w-100 rounded-pill"
+                    onclick="return confirm('Are you sure you want to delete this book?')">🗑️ Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center mt-5 py-3 border-top">
+    <div class="container">
+      <p class="mb-0">© <%= new Date().getFullYear() %> BookTracker | Made with ❤️ by Prathamesh Sahastrabuddhe</p>
+    </div>
+  </footer>
+
+  <!-- Sound Effect -->
+  <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-typewriter-soft-click-1118.mp3" preload="auto"></audio>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const clickSound = document.getElementById("clickSound");
+      document.querySelectorAll("button, a").forEach((el) => {
+        el.addEventListener("click", function () {
+          clickSound.currentTime = 0;
+          clickSound.play();
+        });
+      });
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-PWVH7OdR4pMyjFwG82EZbdRQn4DOguLDxzGlk+PVPkkjyrC8p70QOEHInUQUQHLl"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
