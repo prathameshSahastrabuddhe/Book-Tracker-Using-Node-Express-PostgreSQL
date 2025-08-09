@@ -27,12 +27,3 @@ git clone https://github.com/prathameshSahastrabuddhe/Book-Tracker-Webapp.git
 cd Book-Tracker-Webapp
 
 
-## 📫 How to reach me
-- GitHub: https://github.com/prathameshSahastrabuddhe
-- Email: prathameshsahastrabuddhe2003@gmail.com
-
----
-
-✨ *This README is displayed on my GitHub profile to help others connect with me and to make it easier to find my work online.*  
-**Prathamesh Sahastrabuddhe – Full Stack Developer**
-
